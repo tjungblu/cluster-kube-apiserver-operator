@@ -5,6 +5,7 @@ import (
 	"errors"
 	"sync"
 	"time"
+	"fmt"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmsservice "k8s.io/kms/pkg/service"
@@ -65,6 +66,7 @@ func (p *prober) probe(ctx context.Context, plugin pluginClient) *applyoperatorv
 		WithLastCheckedTime(metav1.NewTime(p.now()))
 
 	resp, err := plugin.service.Status(ctx)
+	fmt.Printf("%s\t%s\t%s\n", resp.Healthz, resp.KeyID, resp.Version)
 	switch {
 	case err != nil:
 		report.WithStatus(operatorv1.KMSPluginHealthStatusError).
